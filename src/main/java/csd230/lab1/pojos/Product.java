@@ -7,6 +7,10 @@ import java.io.Serializable;
 public abstract class Product extends Editable implements SaleableItem, Serializable {
     private String productId;
 
+    public Product() {
+        super();
+    }
+
     public String getProductId() {
         return productId;
     }

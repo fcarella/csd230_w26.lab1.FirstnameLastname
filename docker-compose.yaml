@@ -8,7 +8,7 @@ services:
       - 'MYSQL_DATABASE=csd230'
       - 'MYSQL_PASSWORD=itstudies12345'
       - 'MYSQL_ROOT_PASSWORD=itstudies12345'
-      - 'MYSQL_USER=fcarella'
+      - 'MYSQL_USER=asilveri'
     ports:
       - '3307:3306'
     volumes: # stores data in local folder: ./volumes
