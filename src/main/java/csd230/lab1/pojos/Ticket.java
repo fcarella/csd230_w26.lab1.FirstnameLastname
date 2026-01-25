@@ -1,12 +1,30 @@
 package csd230.lab1.pojos;
 
+import java.util.Objects;
+
 public class Ticket extends Product {
-    public String description = "";
-    public double price = 0.0;
+    private String description;
+    private double price;
+
+    public Ticket() {
+    }
+
+    public Ticket(String description, double price) {
+        this.description = description;
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @Override
     public void sellItem() {
-        System.out.println("Selling Ticket: " + description + " for " + price);
+
     }
 
     @Override
@@ -14,26 +32,26 @@ public class Ticket extends Product {
         return price;
     }
 
-    @Override
-    public void initialize() {
-        System.out.println("Enter Description:");
-        this.description = getInput("Ticket");
-
-        System.out.println("Enter Price:");
-        this.price = getInput(0.0);
-    }
-
-    @Override
-    public void edit() {
-        System.out.println("Edit Description [" + this.description + "]:");
-        this.description = getInput(this.description);
-
-        System.out.println("Edit Price [" + this.price + "]:");
-        this.price = getInput(this.price);
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @Override
     public String toString() {
-        return "Ticket{desc='" + description + "', price=" + price + "}";
+        return "Ticket{description='" + description + "', price=" + price + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ticket)) return false;
+        Ticket ticket = (Ticket) o;
+        return Double.compare(ticket.price, price) == 0 &&
+                Objects.equals(description, ticket.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, price);
     }
 }

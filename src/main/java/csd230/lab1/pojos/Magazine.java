@@ -1,10 +1,11 @@
 package csd230.lab1.pojos;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Magazine extends Publication {
-    private int orderQty = 0;
-    private Date currentIssue = new Date();
+    private int orderQty;
+    private Date currentIssue;
 
     public Magazine() {
     }
@@ -15,43 +16,52 @@ public class Magazine extends Publication {
         this.currentIssue = currentIssue;
     }
 
-    @Override
-    public void initialize() {
-        super.initialize(); // Title
+    // REMOVED: initialize(), edit(), sellItem() methods
 
-        System.out.println("Enter Order Qty:");
-        this.orderQty = getInput(0);
+    public int getOrderQty() {
+        return orderQty;
+    }
 
-        System.out.println("Enter Current Issue Date (dd-MMM-yyyy):");
-        this.currentIssue = getInput(new Date());
+    public void setOrderQty(int orderQty) {
+        this.orderQty = orderQty;
+    }
 
-        super.initPriceCopies(); // Copies, Price
+    public Date getCurrentIssue() {
+        return currentIssue;
+    }
+
+    public void setCurrentIssue(Date currentIssue) {
+        this.currentIssue = currentIssue;
     }
 
     @Override
-    public void edit() {
-        super.edit(); // Title, Price, Copies
+    public String toString() {
+        return "Magazine{" +
+                "orderQty=" + orderQty +
+                ", currentIssue=" + currentIssue +
+                ", title='" + getTitle() + '\'' +
+                ", price=" + getPrice() +
+                ", copies=" + getCopies() +
+                '}';
+    }
 
-        System.out.println("Edit Order Qty [" + this.orderQty + "]:");
-        this.orderQty = getInput(this.orderQty);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Magazine)) return false;
+        if (!super.equals(o)) return false;
+        Magazine magazine = (Magazine) o;
+        return orderQty == magazine.orderQty &&
+                Objects.equals(currentIssue, magazine.currentIssue);
+    }
 
-        System.out.println("Edit Issue Date [" + this.currentIssue + "]:");
-        this.currentIssue = getInput(this.currentIssue);
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), orderQty, currentIssue);
     }
 
     @Override
     public void sellItem() {
-        System.out.println("Selling Magazine: " + getTitle());
-        setCopies(getCopies() - 1);
-    }
 
-    public int getOrderQty() { return orderQty; }
-    public void setOrderQty(int o) { this.orderQty = o; }
-    public Date getCurrentIssue() { return currentIssue; }
-    public void setCurrentIssue(Date d) { this.currentIssue = d; }
-
-    @Override
-    public String toString() {
-        return "Magazine{orderQty=" + orderQty + ", issue=" + currentIssue + ", " + super.toString() + "}";
     }
 }

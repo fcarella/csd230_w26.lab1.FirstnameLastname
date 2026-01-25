@@ -1,6 +1,7 @@
 package csd230.lab1.pojos;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class DiscMag extends Magazine {
     private boolean hasDisc;
@@ -13,33 +14,39 @@ public class DiscMag extends Magazine {
         this.hasDisc = hasDisc;
     }
 
-    @Override
-    public void initialize() {
-        super.initialize(); // Title, Qty, Date, Copies, Price
+    // REMOVED: initialize(), edit(), sellItem() methods
 
-        System.out.println("Has Disc? (true/false):");
-        this.hasDisc = getInput(false);
+    public boolean isHasDisc() {
+        return hasDisc;
     }
 
-    @Override
-    public void edit() {
-        super.edit(); // Title, Price, Copies, OrderQty, Date
-
-        System.out.println("Edit Has Disc [" + this.hasDisc + "]:");
-        this.hasDisc = getInput(this.hasDisc);
+    public void setHasDisc(boolean hasDisc) {
+        this.hasDisc = hasDisc;
     }
-
-    @Override
-    public void sellItem() {
-        System.out.println("Selling Disc Magazine (Disc: " + hasDisc + ")");
-        setCopies(getCopies() - 1);
-    }
-
-    public boolean isHasDisc() { return hasDisc; }
-    public void setHasDisc(boolean h) { this.hasDisc = h; }
 
     @Override
     public String toString() {
-        return "DiscMag{hasDisc=" + hasDisc + ", " + super.toString() + "}";
+        return "DiscMag{" +
+                "hasDisc=" + hasDisc +
+                ", orderQty=" + getOrderQty() +
+                ", currentIssue=" + getCurrentIssue() +
+                ", title='" + getTitle() + '\'' +
+                ", price=" + getPrice() +
+                ", copies=" + getCopies() +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DiscMag)) return false;
+        if (!super.equals(o)) return false;
+        DiscMag discMag = (DiscMag) o;
+        return hasDisc == discMag.hasDisc;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), hasDisc);
     }
 }
