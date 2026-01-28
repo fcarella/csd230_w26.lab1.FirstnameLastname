@@ -75,6 +75,24 @@ classDiagram
         +removeProduct(Product product) void
     }
 
+    class OrderEntity {
+        -long id
+        -double totalAmount
+        -LocalDateTime orderDate
+        -Set~Product~ products
+        +getId() long
+        +setId(long id) void
+        +getTotalAmount() double
+        +setTotalAmount(double totalAmount) void
+        +getOrderDate() LocalDateTime
+        +setOrderDate(LocalDateTime orderDate) void
+        +getProducts() Set~Product~
+        +setProducts(Set~Product~ products) void
+        +addProduct(Product product) void
+        +removeProduct(Product product) void
+        +calculateTotal() double
+    }
+
     class SaleableItem {
         <<Interface>>
         +sellItem() boolean
@@ -98,3 +116,5 @@ classDiagram
 %% Association Relationships
     Cart "1" -- "*" Product : contains
     Product "*" -- "*" Cart : in carts
+    OrderEntity "*" -- "*" Product : contains
+    Product "*" -- "*" OrderEntity : in orders

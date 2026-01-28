@@ -56,8 +56,10 @@ public abstract class ProductEntity implements Serializable, SaleableItem {
 
     public Set<CartEntity> getCarts() { return carts; }
     public void setCarts(Set<CartEntity> carts) { this.carts = carts; }
+    public String getProductType() {
+       return this.getClass().getSimpleName();
+   }
 
-    // Abstract methods - child classes must implement
     @Override
     public abstract void sellItem();
 
