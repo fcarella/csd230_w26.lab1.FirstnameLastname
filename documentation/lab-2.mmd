@@ -106,3 +106,18 @@ classDiagram
         +getPrice()
 
     }
+
+    %% ===== LAB 2 (JPA ENTITIES) =====
+    ProductEntity "0..*" -- "0..*" OrderEntity : items
+
+    class ProductEntity{
+        +Long id
+    }
+
+    class OrderEntity{
+        +Long id
+        +LocalDateTime createdAt
+        +double totalAmount
+    }
+
+
