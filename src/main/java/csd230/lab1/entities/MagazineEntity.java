@@ -20,11 +20,21 @@ public class MagazineEntity extends PublicationEntity {
         this.currentIssue = d;
     }
 
-    public int getOrderQty() { return orderQty; }
-    public void setOrderQty(int o) { this.orderQty = o; }
+    public int getOrderQty() {
+        return orderQty;
+    }
 
-    public LocalDateTime getCurrentIssue() { return currentIssue; }
-    public void setCurrentIssue(LocalDateTime d) { this.currentIssue = d; }
+    public void setOrderQty(int o) {
+        this.orderQty = o;
+    }
+
+    public LocalDateTime getCurrentIssue() {
+        return currentIssue;
+    }
+
+    public void setCurrentIssue(LocalDateTime d) {
+        this.currentIssue = d;
+    }
 
     @Override
     public String toString() {

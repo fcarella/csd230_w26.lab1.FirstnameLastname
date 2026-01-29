@@ -4,13 +4,16 @@ import csd230.lab1.entities.BookEntity;
 import csd230.lab1.entities.ProductEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@SpringBootTest
+@Transactional
 class ProductEntityRepositoryTest {
 
     @Autowired
@@ -18,8 +21,8 @@ class ProductEntityRepositoryTest {
 
     @Test
     void saveBook_andFindAll_shouldReturnAtLeastOneProduct() {
-        BookEntity book = new BookEntity("JUnit Book", 19.99, 5, "Test Author");
 
+        BookEntity book = new BookEntity("JUnit Book", 19.99, 5, "Test Author");
         productEntityRepository.save(book);
 
         List<ProductEntity> all = productEntityRepository.findAll();
