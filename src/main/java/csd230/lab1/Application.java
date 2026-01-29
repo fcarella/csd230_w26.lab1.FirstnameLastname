@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,15 +18,24 @@ public class Application  implements CommandLineRunner {
     private final CartRepository cartRepository;
     private final CarRepository carRepository;
     private final MotorcycleRepository motorcycleRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final OrderRepository orderRepository;
 
     public Application(ProductRepository productRepository,
                        CartRepository cartRepository,
                        CarRepository carRepository,
-                       MotorcycleRepository motorcycleRepository) {
+                       MotorcycleRepository motorcycleRepository,
+                       UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
+                       OrderRepository orderRepository) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.carRepository = carRepository;
         this.motorcycleRepository = motorcycleRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.orderRepository = orderRepository;
     }
 
     public static void main(String[] args) {
@@ -35,6 +45,18 @@ public class Application  implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
+        // CREATE USERS (Lecture 2.6)
+        // Admin User (Can Add/Edit/Delete)
+        UserEntity admin = new UserEntity("admin", passwordEncoder.encode("admin"), "ADMIN");
+        userRepository.save(admin);
+
+        // Regular User (Can only View/Buy)
+        UserEntity user = new UserEntity("user", passwordEncoder.encode("user"), "USER");
+        userRepository.save(user);
+
+        System.out.println("Default users created: admin/admin and user/user");
+
+        // ALL YOUR EXISTING CODE BELOW (kept exactly as is)
         Faker faker = new Faker();
         Commerce cm = faker.commerce();
         com.github.javafaker.Number number = faker.number();
