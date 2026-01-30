@@ -1,7 +1,8 @@
 package csd230.lab1.controllers;
-import csd230.lab1.entities.BookEntity;
+import java.security.Principal;import csd230.lab1.entities.BookEntity;
 import csd230.lab1.entities.CartEntity;
-import csd230.lab1.repositories.BookRepository;
+import csd230.lab1.entities.UserEntity;
+import csd230.lab1.repositories.UserRepository;import csd230.lab1.repositories.BookRepository;
 import csd230.lab1.repositories.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,45 +17,51 @@ public class CartController {
     private CartRepository cartRepository;
     @Autowired
     private BookRepository bookRepository;
-    // 1. View the contents of the cart
-    @GetMapping
-    public String viewCart(Model model) {
-        // HARDCODED ID: In a real app, this comes from the Session or SecurityContext
-        Long defaultCartId = 1L;
+    @Autowired
+    private UserRepository userRepository;
+    private CartEntity getCartForCurrentUser(Principal principal) {
+        // 1. Get username from security context
+        String username = principal.getName();
+        // 2. Find User in DB
+        UserEntity user = userRepository.findByUsername(username);
 
-        // Find cart with ID 1, or create a temporary empty one if not found
-        CartEntity cart = cartRepository.findById(defaultCartId)
-                .orElseGet(() -> {
-                    CartEntity newCart = new CartEntity();
-                    newCart.setId(defaultCartId);
-                    return cartRepository.save(newCart); // Save it so it exists
-                });
+        // 3. Find Cart for this User
+        CartEntity cart = cartRepository.findByUser(user);
+
+        // 4. If no cart exists, create one and link it to the user
+        if (cart == null) {
+            cart = new CartEntity();
+            cart.setUser(user);
+            cartRepository.save(cart);
+        }
+        return cart;
+    }
+    @GetMapping
+    public String viewCart(Model model, Principal principal) {
+        CartEntity cart = getCartForCurrentUser(principal);
         model.addAttribute("cart", cart);
         return "cartDetails";
     }
-    // 2. Add a specific book to the cart
     @GetMapping("/add/{bookId}")
-    public String addToCart(@PathVariable Long bookId) {
-        Long defaultCartId = 1L;
-        CartEntity cart = cartRepository.findById(defaultCartId).orElse(null);
+    public String addToCart(@PathVariable Long bookId, Principal principal) {
+        CartEntity cart = getCartForCurrentUser(principal);
         BookEntity book = bookRepository.findById(bookId).orElse(null);
-        if (cart != null && book != null) {
-            cart.addProduct(book); // Uses the helper method in CartEntity
-            cartRepository.save(cart); // Updates the Join Table
+        if (book != null) {
+            cart.addProduct(book);
+            cartRepository.save(cart);
         }
-        return "redirect:/books"; // Send them back to the shopping list
+        return "redirect:/books";
     }
-
-    // 3. Remove item from cart
     @GetMapping("/remove/{bookId}")
-    public String removeFromCart(@PathVariable Long bookId) {
-        Long defaultCartId = 1L;
-        CartEntity cart = cartRepository.findById(defaultCartId).orElse(null);
+    public String removeFromCart(@PathVariable Long bookId, Principal principal) {
+        CartEntity cart = getCartForCurrentUser(principal);
         BookEntity book = bookRepository.findById(bookId).orElse(null);
-        if(cart != null && book != null) {
+
+        if (book != null) {
             cart.getProducts().remove(book);
             cartRepository.save(cart);
         }
         return "redirect:/cart";
     }
 }
+

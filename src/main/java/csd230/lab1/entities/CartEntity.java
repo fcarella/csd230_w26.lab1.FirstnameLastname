@@ -1,4 +1,5 @@
 package csd230.lab1.entities;
+
 import jakarta.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -10,22 +11,56 @@ public class CartEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    // LinkedHashSet for NO duplicate items
+
+    // One-to-One relationship with User
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+    // Many-to-Many relationship with Products
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "cart_products",
             joinColumns = @JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-
     private Set<ProductEntity> products = new LinkedHashSet<>();
-    public void addProduct(ProductEntity product) {
-        this.products.add(product);
-        product.getCarts().add(this); // Maintain the link on both sides
+
+    // Getters and Setters for user
+    public UserEntity getUser() {
+        return user;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Set<ProductEntity> getProducts() { return products; }
-    public void setProducts(Set<ProductEntity> products) { this.products = products; }
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    // Getters and Setters for id and products
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Set<ProductEntity> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<ProductEntity> products) {
+        this.products = products;
+    }
+
+    // Helper methods
+    public void addProduct(ProductEntity product) {
+        this.products.add(product);
+        // Note: You need to have getCarts() method in ProductEntity for this to work
+        // product.getCarts().add(this); // Maintain the link on both sides
+    }
+
+    public void removeProduct(ProductEntity product) {
+        this.products.remove(product);
+        // product.getCarts().remove(this);
+    }
 }
