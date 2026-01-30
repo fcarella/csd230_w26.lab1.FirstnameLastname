@@ -3,10 +3,9 @@ package csd230.lab1.pojos;
 import java.util.Objects;
 
 public class Book extends Publication {
-    private String author = "";
+    private String author;
 
     public Book() {
-        super();
     }
 
     public Book(String author) {
@@ -18,34 +17,7 @@ public class Book extends Publication {
         this.author = author;
     }
 
-    @Override
-    public void initialize() {
-        // 1. Initialize Parent (Title)
-        super.initialize();
-
-        // 2. Initialize Self (Author)
-        System.out.println("Enter Author:");
-        this.author = getInput("Unknown Author");
-
-        // 3. Initialize Parent (Copies/Price)
-        super.initPriceCopies();
-    }
-
-    @Override
-    public void edit() {
-        // 1. Edit Parent fields (Title, Price, Copies)
-        super.edit();
-
-        // 2. Edit Self fields
-        System.out.println("Edit Author [" + this.author + "]:");
-        this.author = getInput(this.author);
-    }
-
-    @Override
-    public void sellItem() {
-        System.out.println("Selling Book: " + getTitle() + " by " + author);
-        setCopies(getCopies() - 1);
-    }
+    // REMOVED: initialize(), edit(), sellItem() methods if they use getInput()
 
     public String getAuthor() {
         return author;
@@ -57,7 +29,12 @@ public class Book extends Publication {
 
     @Override
     public String toString() {
-        return "Book{author='" + author + "', " + super.toString() + "}";
+        return "Book{" +
+                "author='" + author + '\'' +
+                ", title='" + getTitle() + '\'' +
+                ", price=" + getPrice() +
+                ", copies=" + getCopies() +
+                '}';
     }
 
     @Override
@@ -72,5 +49,10 @@ public class Book extends Publication {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), author);
+    }
+
+    @Override
+    public void sellItem() {
+
     }
 }

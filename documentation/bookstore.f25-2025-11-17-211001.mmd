@@ -1,97 +1,120 @@
 classDiagram
-    Editable <|--Product
-    Product <|--Ticket
-    Product <|--Publication
-    Publication <|-- Book
-    Publication <|-- Magazine
-    Magazine <|-- DiscMag
-    SaleableItem <|.. Product
-    Serializable <|.. Product
-    Product <-- CashTill
-
-    class Product{
-        -String productId
+    class Product {
+        <<Abstract>>
+        #long id
+        +getId() long
+        +setId(long id) void
     }
 
-    class Serializable{
-        <<interface>>
-    }
-    class Ticket{
-        +description
-        +price
-        +sellItem()
-    }
-    class Editable{
-        <<abstract>>
-        -Scanner input
-        +String getInput(String)
-        +int getInput(int)
-        +double getInput(double)
-        +boolean getInput(boolean)
-        +Date getInput(Date)
-        +Enum getInput(Enum)
-        +edit()*
-        +initialize()*
-
-    }
-    class Publication{
+    class Publication {
         <<Abstract>>
         -String title
         -double price
         -int copies
-        +getPrice()
-
-        +Publication()
-        +Publication(String title, double price, int copies)
-        +toString()
-        +equals()
-        +hashCode()
-
+        +getTitle() String
+        +setTitle(String title) void
+        +getPrice() double
+        +setPrice(double price) void
+        +getCopies() int
+        +setCopies(int copies) void
     }
-    class Book{
+
+    class Book {
         -String author
-        +edit()
-        +initialize()
-        +sellItem()
-
-        +Book()
-        +Book(String author)
-        +Book(String author, String title, double price, int copies)
-        +toString()
-        +equals()
-        +hashCode()
-
+        +getAuthor() String
+        +setAuthor(String author) void
     }
-    class Magazine{
+
+    class Magazine {
+        -LocalDateTime currentIssue
         -int orderQty
-        -java.util.Date currentIssue
-
-        +Magazine()
-        +Magazine(int orderQty, Date currentIssue, String title, double price, int copies)
-
-        +edit()
-        +initialize()
-        +sellItem()
+        +getCurrentIssue() LocalDateTime
+        +setCurrentIssue(LocalDateTime currentIssue) void
+        +getOrderQty() int
+        +setOrderQty(int orderQty) void
     }
-    class DiscMag{
+
+    class DiscMag {
         -boolean hasDisc
-        +edit()
-        +initialize()
-        +sellItem()
-
-        +DiscMag()
-        +DiscMag(boolean, hasDisc, int orderQty, Date currentIssue, String title, double price, int copies)
-
+        +isHasDisc() boolean
+        +setHasDisc(boolean hasDisc) void
     }
-    class CashTill{
-        -double runningTotal
-        +CashTill()
-        +showTotal()
-        +sellItem(SaleableItem item)
+
+    class Ticket {
+        +sellItem() boolean
     }
+
+    class Vehicle {
+        <<Abstract>>
+        -String engineType
+        +getEngineType() String
+        +setEngineType(String engineType) void
+    }
+
+    class Car {
+        -int numberOfDoors
+        +getNumberOfDoors() int
+        +setNumberOfDoors(int numberOfDoors) void
+        +sellItem() boolean
+    }
+
+    class Motorcycle {
+        -boolean hasSidecar
+        +isHasSidecar() boolean
+        +setHasSidecar(boolean hasSidecar) void
+        +sellItem() boolean
+    }
+
+    class Cart {
+        -long id
+        -Set~Product~ products
+        +getId() long
+        +getProducts() Set~Product~
+        +setProducts(Set~Product~ products) void
+        +addProduct(Product product) void
+        +removeProduct(Product product) void
+    }
+
+    class OrderEntity {
+        -long id
+        -double totalAmount
+        -LocalDateTime orderDate
+        -Set~Product~ products
+        +getId() long
+        +setId(long id) void
+        +getTotalAmount() double
+        +setTotalAmount(double totalAmount) void
+        +getOrderDate() LocalDateTime
+        +setOrderDate(LocalDateTime orderDate) void
+        +getProducts() Set~Product~
+        +setProducts(Set~Product~ products) void
+        +addProduct(Product product) void
+        +removeProduct(Product product) void
+        +calculateTotal() double
+    }
+
     class SaleableItem {
-        <<interface>>
-        +sellItem()
-        +getPrice()
-
+        <<Interface>>
+        +sellItem() boolean
     }
+
+%% Inheritance/Extension Relationships
+    Product <|-- Publication : extends
+    Publication <|-- Book : extends
+    Publication <|-- Magazine : extends
+    Product <|-- Ticket : extends
+    Product <|-- Vehicle : extends
+    Magazine <|-- DiscMag : extends
+    Vehicle <|-- Car : extends
+    Vehicle <|-- Motorcycle : extends
+
+%% Interface Implementation
+    SaleableItem <|.. Ticket : implements
+    SaleableItem <|.. Car : implements
+    SaleableItem <|.. Motorcycle : implements
+
+%% Association Relationships
+    Cart "1" -- "*" Product : contains
+    Product "*" -- "*" Cart : in carts
+    OrderEntity "*" -- "*" Product : contains
+    Product "*" -- "*" OrderEntity : in orders
