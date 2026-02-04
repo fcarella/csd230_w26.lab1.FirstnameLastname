@@ -97,7 +97,6 @@
 <div class="confirmation-container">
     <!-- Order Confirmation Header -->
     <div class="confirmation-header">
-        <div class="confirmation-icon">✅</div>
         <h1>Order Confirmed!</h1>
         <p>Thank you for your purchase. Your order has been successfully processed.</p>
     </div>
@@ -105,7 +104,7 @@
     <!-- Order Information -->
     <div class="order-info">
         <div class="order-section">
-            <h3>📋 Order Details</h3>
+            <h3> Order Details</h3>
             <div class="info-grid">
                 <div class="info-item">
                     <strong>Order ID</strong>
@@ -124,7 +123,7 @@
 
         <!-- Products Purchased -->
         <div class="order-section">
-            <h3>🛍️ Items Purchased</h3>
+            <h3> Items Purchased</h3>
             <div th:if="${order.products.empty}">
                 <p>No items in this order.</p>
             </div>
@@ -166,7 +165,7 @@
 
         <!-- Order Total -->
         <div class="order-section">
-            <h3>💰 Payment Summary</h3>
+            <h3>Payment Summary</h3>
             <div class="total-section">
                 <div style="margin-bottom: 10px;">
                     <span>Subtotal: $<span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 2)}"></span></span>

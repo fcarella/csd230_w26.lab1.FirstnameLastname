@@ -31,7 +31,7 @@
 <body>
 <div class="cart-container">
     <div class="cart-header">
-        <h1>🛒 Your Shopping Cart</h1>
+        <h1>Your Shopping Cart</h1>
         <p>Cart ID: <span th:text="${cart.id}"></span></p>
     </div>
 
@@ -78,7 +78,7 @@
                 </div>
                 <div class="item-actions">
                     <a th:href="@{/cart/remove/{id}(id=${product.id})}"
-                       style="color: #dc3545; text-decoration: none;">❌ Remove</a>
+                       style="color: #dc3545; text-decoration: none;"> Remove</a>
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@
 
         <!-- Checkout Form -->
         <form th:action="@{/cart/checkout}" method="post">
-            <button type="submit" class="checkout-button">✅ Proceed to Checkout</button>
+            <button type="submit" class="checkout-button"> Proceed to Checkout</button>
         </form>
 
         <div style="margin-top: 20px; text-align: center;">
