@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Order Confirmation</title>
@@ -94,6 +94,15 @@
     </style>
 </head>
 <body>
+<div style="float:right">
+    <!-- Display logged in user -->
+    Logged in as: <span sec:authentication="name">User</span>
+
+    <!-- Logout Form (Must be POST for security) -->
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
 <div class="confirmation-container">
     <!-- Order Confirmation Header -->
     <div class="confirmation-header">

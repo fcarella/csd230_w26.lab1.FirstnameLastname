@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+
 
 @Entity
 @Table(name = "cart_entity")
@@ -13,6 +16,12 @@ public class CartEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+    // ... Getters and Setters for user ...
+    public UserEntity getUser() { return user; }
+    public void setUser(UserEntity user) { this.user = user; }
 
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -22,6 +31,8 @@ public class CartEntity {
             inverseJoinColumns = @JoinColumn(name = "product_id"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"cart_id", "product_id"})
     )
+
+
     private Set<ProductEntity> products = new LinkedHashSet<>();
 
     public CartEntity() {}
@@ -54,6 +65,7 @@ public class CartEntity {
                 product.getCarts().add(this);
             }
         }
+
     }
 
     @Override
