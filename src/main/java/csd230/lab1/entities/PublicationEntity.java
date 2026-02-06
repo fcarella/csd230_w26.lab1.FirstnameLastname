@@ -3,7 +3,9 @@ package csd230.lab1.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
-@Entity
+import jakarta.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class PublicationEntity extends ProductEntity {
     private String title;
     @Column(name = "pub_price") private double price;
