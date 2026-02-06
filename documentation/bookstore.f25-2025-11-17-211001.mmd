@@ -1,13 +1,37 @@
 classDiagram
-    Editable <|--Product
-    Product <|--Ticket
-    Product <|--Publication
+    Editable <|-- Product
+    Product <|-- Ticket
+    Product <|-- Publication
     Publication <|-- Book
     Publication <|-- Magazine
     Magazine <|-- DiscMag
+
+    %% Niche hierarchy (Electronics)
+    Product <|-- Electronics
+    Electronics <|-- Laptop
+    Electronics <|-- Phone
+
+    %% Cart relationship
+    Cart "0..*" -- "0..*" Product : contains
+
     SaleableItem <|.. Product
     Serializable <|.. Product
     Product <-- CashTill
+
+    class Cart{
+        +Long id
+    }
+
+    class Electronics{
+        <<abstract>>
+        -String brand
+    }
+    class Laptop{
+        -int ramGb
+    }
+    class Phone{
+        -boolean has5g
+    }
 
     class Product{
         -String productId
@@ -32,7 +56,6 @@ classDiagram
         +Enum getInput(Enum)
         +edit()*
         +initialize()*
-
     }
     class Publication{
         <<Abstract>>
@@ -40,52 +63,20 @@ classDiagram
         -double price
         -int copies
         +getPrice()
-
-        +Publication()
-        +Publication(String title, double price, int copies)
-        +toString()
-        +equals()
-        +hashCode()
-
     }
     class Book{
         -String author
-        +edit()
-        +initialize()
-        +sellItem()
-
-        +Book()
-        +Book(String author)
-        +Book(String author, String title, double price, int copies)
-        +toString()
-        +equals()
-        +hashCode()
-
+        -String isbn
     }
     class Magazine{
         -int orderQty
-        -java.util.Date currentIssue
-
-        +Magazine()
-        +Magazine(int orderQty, Date currentIssue, String title, double price, int copies)
-
-        +edit()
-        +initialize()
-        +sellItem()
+        -java.time.LocalDateTime currentIssue
     }
     class DiscMag{
         -boolean hasDisc
-        +edit()
-        +initialize()
-        +sellItem()
-
-        +DiscMag()
-        +DiscMag(boolean, hasDisc, int orderQty, Date currentIssue, String title, double price, int copies)
-
     }
     class CashTill{
         -double runningTotal
-        +CashTill()
         +showTotal()
         +sellItem(SaleableItem item)
     }
@@ -93,5 +84,4 @@ classDiagram
         <<interface>>
         +sellItem()
         +getPrice()
-
     }
