@@ -29,18 +29,22 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        // 1. Allow public access to specific endpoints
+
                         .requestMatchers("/h2-console/**", "/login", "/css/**", "/js/**").permitAll()
 
-                        // 2. Allow public access to register as well
-                        .requestMatchers("/h2-console/**", "/login", "/register", "/css/**", "/js/**").permitAll()
 
-                        // 3. Admin only endpoints (CRUD operations on books)
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+                        // ------------------------------------
+                        // Admin only
                         .requestMatchers("/books/add", "/books/edit/**", "/books/delete/**").hasRole("ADMIN")
-
-                        // 4. All other requests (view books, cart) require login
+                        // All others
                         .anyRequest().authenticated()
                 )
+
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/books", true)
