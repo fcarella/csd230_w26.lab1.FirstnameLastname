@@ -6,13 +6,17 @@ classDiagram
     Publication <|-- Magazine
     Magazine <|-- DiscMag
 
-    %% Niche hierarchy (Electronics)
+%% Niche hierarchy (Electronics)
     Product <|-- Electronics
     Electronics <|-- Laptop
     Electronics <|-- Phone
 
-    %% Cart relationship
+%% Cart relationship
     Cart "0..*" -- "0..*" Product : contains
+
+
+%% ✅ Lab 2: Order relationship
+    Order "0..*" -- "0..*" Product : contains
 
     SaleableItem <|.. Product
     Serializable <|.. Product
@@ -20,6 +24,13 @@ classDiagram
 
     class Cart{
         +Long id
+    }
+
+%% ✅ Lab 2: OrderEntity added
+    class Order{
+        +Long id
+        +java.time.LocalDateTime orderDate
+        +double totalAmount
     }
 
     class Electronics{
@@ -58,7 +69,7 @@ classDiagram
         +initialize()*
     }
     class Publication{
-        <<Abstract>>
+        <<abstract>>
         -String title
         -double price
         -int copies

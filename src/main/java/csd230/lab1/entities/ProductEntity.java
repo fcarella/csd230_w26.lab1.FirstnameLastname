@@ -26,6 +26,11 @@ public abstract class ProductEntity implements Serializable, SaleableItem {
     public Set<CartEntity> getCarts() { return carts; }
     public void setCarts(Set<CartEntity> carts) { this.carts = carts; }
 
+    // ✅ Add this for Thymeleaf pages (cart/order)
+    public String getProductType() {
+        return this.getClass().getSimpleName();
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + "{id=" + id + "}";
