@@ -53,6 +53,9 @@ public abstract class ProductEntity implements Serializable, SaleableItem {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
+    public String getProductType() {
+        return this.getClass().getSimpleName();
+    }
 
     @Override
     public String toString() {

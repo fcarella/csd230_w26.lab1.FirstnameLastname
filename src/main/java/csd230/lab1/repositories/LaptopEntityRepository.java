@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface LaptopEntityRepository extends JpaRepository<LaptopEntity, Long> {
-    List<LaptopEntity> findByRamGBGreaterThan(int ramGB);
+    List<LaptopEntity> findByRamGbGreaterThan(int ramGb);
 }

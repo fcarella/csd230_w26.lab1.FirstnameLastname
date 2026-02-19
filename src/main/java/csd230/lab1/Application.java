@@ -109,9 +109,6 @@ public class Application implements CommandLineRunner {
             for (ProductEntity p : c.getProducts()) System.out.println("  " + p);
         }
 
-        System.out.println("=== BOOK BY ISBN ===");
-        System.out.println(bookRepo.findByIsbn(b1.getIsbn()));
-
         // ---------- UPDATE ----------
         b1.setTitle(b1.getTitle() + " (Updated)");
         bookRepo.save(b1);
