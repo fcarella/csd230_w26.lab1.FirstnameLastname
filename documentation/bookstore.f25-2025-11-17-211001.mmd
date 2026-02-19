@@ -1,13 +1,22 @@
 classDiagram
-    Editable <|--Product
-    Product <|--Ticket
-    Product <|--Publication
+    Product <|-- Ticket
+    Product <|-- Publication
     Publication <|-- Book
     Publication <|-- Magazine
     Magazine <|-- DiscMag
+
+%% --- NEW NICHE: Electronics ---
+    Product <|-- Electronics
+    Electronics <|-- Phone
+    Electronics <|-- Laptop
+
     SaleableItem <|.. Product
     Serializable <|.. Product
     Product <-- CashTill
+
+    Cart "1" --> "0..*" Product
+    CashTill ..> Cart
+    CashTill ..> SaleableItem
 
     class Product{
         -String productId
@@ -16,24 +25,13 @@ classDiagram
     class Serializable{
         <<interface>>
     }
+
     class Ticket{
         +description
         +price
         +sellItem()
     }
-    class Editable{
-        <<abstract>>
-        -Scanner input
-        +String getInput(String)
-        +int getInput(int)
-        +double getInput(double)
-        +boolean getInput(boolean)
-        +Date getInput(Date)
-        +Enum getInput(Enum)
-        +edit()*
-        +initialize()*
 
-    }
     class Publication{
         <<Abstract>>
         -String title
@@ -46,8 +44,8 @@ classDiagram
         +toString()
         +equals()
         +hashCode()
-
     }
+
     class Book{
         -String author
         +edit()
@@ -60,8 +58,8 @@ classDiagram
         +toString()
         +equals()
         +hashCode()
-
     }
+
     class Magazine{
         -int orderQty
         -java.util.Date currentIssue
@@ -73,6 +71,7 @@ classDiagram
         +initialize()
         +sellItem()
     }
+
     class DiscMag{
         -boolean hasDisc
         +edit()
@@ -80,18 +79,54 @@ classDiagram
         +sellItem()
 
         +DiscMag()
-        +DiscMag(boolean, hasDisc, int orderQty, Date currentIssue, String title, double price, int copies)
-
+        +DiscMag(boolean hasDisc, int orderQty, Date currentIssue, String title, double price, int copies)
     }
+
+%% --- NEW NICHE CLASSES ---
+    class Electronics{
+        <<Abstract>>
+        -int warrantyMonths
+        +Electronics()
+        +Electronics(String title, double price, int warrantyMonths)
+    }
+
+    class Phone{
+        -boolean has5g
+        +Phone()
+        +Phone(String title, double price, int warrantyMonths, boolean has5g)
+        +edit()
+        +initialize()
+        +sellItem()
+    }
+
+    class Laptop{
+        -int ramGB
+        -int storageGB
+        +Laptop()
+        +Laptop(String title, double price, int warrantyMonths, int ramGB, int storageGB)
+        +edit()
+        +initialize()
+        +sellItem()
+    }
+
+    class Cart{
+        -List~Product~ items
+        +addItem(Product)
+        +removeItem(Product)
+        +getItems() List~Product~
+        +getTotal() double
+        +clear()
+    }
+
     class CashTill{
         -double runningTotal
         +CashTill()
         +showTotal()
         +sellItem(SaleableItem item)
     }
+
     class SaleableItem {
         <<interface>>
         +sellItem()
         +getPrice()
-
     }
