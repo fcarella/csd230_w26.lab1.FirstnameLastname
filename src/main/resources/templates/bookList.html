@@ -1,7 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><title>Book List</title></head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Book List</title>
+</head>
 <body>
+
+<div style="float:right">
+    Logged in as: <span sec:authentication="name">User</span>
+
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
+
 <h1>Book List</h1>
 
 <p><a th:href="@{/cart}">View Cart</a></p>
@@ -19,16 +31,26 @@
         <td th:text="${book.price}"></td>
         <td th:text="${book.copies}"></td>
         <td>
-            <a th:href="@{/books/{id}(id=${book.id})}">Details</a> |
-            <a th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a> |
-            <a th:href="@{/books/delete/{id}(id=${book.id})}">Delete</a> |
-            <strong><a th:href="@{/cart/add/{id}(id=${book.id})}">Add to Cart</a></strong>
+            <a th:href="@{/books/{id}(id=${book.id})}">Details</a>
+
+            <strong> | <a th:href="@{/cart/add/{id}(id=${book.id})}">Add to Cart</a></strong>
+
+            <!-- ADMIN ONLY -->
+            <span sec:authorize="hasRole('ADMIN')">
+                | <a th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a>
+                | <a th:href="@{/books/delete/{id}(id=${book.id})}">Delete</a>
+            </span>
         </td>
     </tr>
     </tbody>
 </table>
 
 <br/>
-<a th:href="@{/books/add}">Add New Book</a>
+
+<!-- ADMIN ONLY -->
+<div sec:authorize="hasRole('ADMIN')">
+    <a th:href="@{/books/add}">Add New Book</a>
+</div>
+
 </body>
 </html>

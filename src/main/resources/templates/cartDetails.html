@@ -1,47 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><title>Shopping Cart</title></head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Shopping Cart</title>
+</head>
 <body>
+
+<!-- ✅ Top-right logged-in user + logout -->
+<div style="float:right">
+    Logged in as: <span sec:authentication="name">User</span>
+
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
+
 <h1>Your Shopping Cart</h1>
 
-<div th:if="${error}">
-    <p style="color:red;" th:text="${error}"></p>
-</div>
-
-<div th:if="${cart == null || cart.products.empty}">
-    <p>Your cart is empty.</p>
-</div>
-
-<table border="1" th:unless="${cart == null || cart.products.empty}">
+<table border="1">
     <thead>
     <tr>
-        <th>Item</th><th>Type</th><th>Price</th><th>Action</th>
+        <th>Item</th>
+        <th>Type</th>
+        <th>Price</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="product : ${cart.products}">
+        <td th:text="${product.title}">Title</td>
+        <td th:text="${product.getClass().getSimpleName()}">Type</td>
+        <td th:text="${product.price}">0.00</td>
         <td>
-            <span th:if="${product instanceof T(csd230.lab1.entities.PublicationEntity)}"
-                  th:text="${product.title}"></span>
-            <span th:if="${product instanceof T(csd230.lab1.entities.TicketEntity)}"
-                  th:text="${product.description}"></span>
-            <span th:if="${product instanceof T(csd230.lab1.entities.ElectronicsEntity)}"
-                  th:text="${product.brand}"></span>
+            <a th:href="@{/cart/remove/{id}(id=${product.id})}">Remove</a>
         </td>
-        <td th:text="${product.productType}"></td>
-        <td th:text="${product.price}"></td>
-        <td><a th:href="@{/cart/remove/{id}(id=${product.id})}">Remove</a></td>
     </tr>
     </tbody>
 </table>
 
-<br>
-<div th:unless="${cart == null || cart.products.empty}">
-    <form th:action="@{/cart/checkout}" method="post">
-        <button type="submit">Checkout</button>
-    </form>
-</div>
+<br/>
 
-<p><a th:href="@{/books}">Continue Shopping</a></p>
+<form th:action="@{/cart/checkout}" method="post">
+    <button type="submit">Checkout</button>
+</form>
+
+<br/>
+<a th:href="@{/books}">Continue Shopping</a>
+
 </body>
 </html>
