@@ -3,7 +3,9 @@ package csd230.lab1.config;
 import csd230.lab1.services.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,33 +22,60 @@ public class WebSecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * ✅ Chain #1 (HIGHEST PRIORITY)
+     * For Lab 4 REST + Swagger + H2
+     * - No login redirect
+     * - No CSRF
+     * - Permit all
+     */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> requests
-                        // ✅ public pages (we will add /register in Lab 3 step)
-                        .requestMatchers("/h2-console/**", "/login", "/register", "/css/**", "/js/**").permitAll()
+                .securityMatcher(
+                        "/api/rest/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/h2-console/**"
+                )
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable());
 
-                        // ✅ admin-only book management
+        // allow H2 frames
+        http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
+
+        return http.build();
+    }
+
+    /**
+     * ✅ Chain #2 (DEFAULT)
+     * For your MVC pages (books UI etc.)
+     * - Normal login
+     * - Admin restrictions
+     */
+    @Bean
+    @Order(2)
+    public SecurityFilterChain mvcSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/books/add", "/books/edit/**", "/books/delete/**").hasRole("ADMIN")
-
-                        // ✅ everything else requires login
                         .anyRequest().authenticated()
                 )
-                .formLogin((form) -> form
+                .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/books", true)
                         .permitAll()
                 )
-                .logout((logout) -> logout
+                .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 );
-
-        // H2 console support (safe even if you use MySQL)
-        http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
-        http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
 
         return http.build();
     }
@@ -63,5 +92,4 @@ public class WebSecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-
 }
