@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Shopping Cart</title>
+</head>
+<body>
+
+<!-- ✅ Top-right logged-in user + logout -->
+<div style="float:right">
+    Logged in as: <span sec:authentication="name">User</span>
+
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
+
+<h1>Your Shopping Cart</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Item</th>
+        <th>Type</th>
+        <th>Price</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${cart.products}">
+        <td th:text="${product.title}">Title</td>
+        <td th:text="${product.getClass().getSimpleName()}">Type</td>
+        <td th:text="${product.price}">0.00</td>
+        <td>
+            <a th:href="@{/cart/remove/{id}(id=${product.id})}">Remove</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+
+<form th:action="@{/cart/checkout}" method="post">
+    <button type="submit">Checkout</button>
+</form>
+
+<br/>
+<a th:href="@{/books}">Continue Shopping</a>
+
+</body>
+</html>
