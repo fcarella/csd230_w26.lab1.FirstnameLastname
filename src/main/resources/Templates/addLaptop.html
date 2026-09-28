@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add New Laptop</title>
+</head>
+<body>
+<h1>Add New Laptop</h1>
+<form action="#" th:action="@{/laptops/add}" th:object="${laptop}" method="post">
+    <label>Brand: <input type="text" th:field="*{brand}" required /></label><br/><br/>
+    <label>Description: <input type="text" th:field="*{description}" required /></label><br/><br/>
+    <label>Price ($): <input type="number" step="0.01" th:field="*{price}" required /></label><br/><br/>
+    <label>RAM (GB): <input type="number" th:field="*{ramGb}" required /></label><br/><br/>
+    <button type="submit">Save Laptop</button>
+</form>
+<br/>
+<a th:href="@{/laptops}">Back to Catalog</a>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Laptop Catalog</title>
+</head>
+<body>
+<h1>Laptop Catalog</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Brand</th>
+        <th>Description</th>
+        <th>Price ($)</th>
+        <th>RAM (GB)</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="laptop : ${laptops}">
+        <td th:text="${laptop.id}"></td>
+        <td th:text="${laptop.brand}"></td>
+        <td th:text="${laptop.description}"></td>
+        <td th:text="${laptop.price}"></td>
+        <td th:text="${laptop.ramGb}"></td>
+        <td>
+            <a th:href="@{/laptops/{id}(id=${laptop.id})}">Details</a> |
+            <a th:href="@{/laptops/edit/{id}(id=${laptop.id})}">Edit</a> |
+            <a th:href="@{/laptops/delete/{id}(id=${laptop.id})}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br/>
+<a th:href="@{/laptops/add}">Add New Laptop</a>
+</body>
+</html>
